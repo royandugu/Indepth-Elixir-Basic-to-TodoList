@@ -1,17 +1,22 @@
-defmodule TodoList do
+defmodule ShoppingCart do
+  @moduledoc """
+    This is a module that will implement shopping cart using a map
+  """
   def new, do: %{}
-  def add_item(list,item,date) do
-
+  def add_item(cart,itemNo,itemName) do
+    Map.update(cart, itemNo, [itemName], fn [items] -> [itemName | items] end)
+  end
+  def view_cart(cart) do
+    IO.inspect(cart)
+  end
+  def view_items(cart,itemNo) do
+    #The third argument is the default value that is returned if the key doesnot exist in the map
+    Map.get(cart,itemNo,[])
   end
 end
-
-defmodule Testing do
-  def add_value(todoList,date,list) do
-    Map.update(todoList,date,[list],fn [lists] -> [list | lists] end)
-  end
-  def see_value(todoList) do
-    IO.inspect(todoList)
-  end
-end
-list=Testing.add_value(%{1=>["Butter"]},1,"Eggs")
-Testing.see_value(list)
+cart=ShoppingCart.new() #created a new shopping cart
+cart=ShoppingCart.add_item(cart,1,"Butter")
+cart=ShoppingCart.add_item(cart,1,"Fish")
+cart=ShoppingCart.add_item(cart,2,"Vanilla")
+ShoppingCart.view_cart(cart)
+IO.inspect(ShoppingCart.view_items(cart,1))
