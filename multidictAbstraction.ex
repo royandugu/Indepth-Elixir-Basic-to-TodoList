@@ -37,3 +37,24 @@ cart=MultiDict.add_entries(cart,1,"Fish")
 cart=MultiDict.add_entries(cart,2,"Vanilla")
 ShoppingCart.view_cart(cart)
 IO.inspect(ShoppingCart.view_items(cart,1))
+
+
+## Now using structure entries
+defmodule MultiDictMap do
+  @moduledoc """
+    So basically in the above example we had to individually put each values
+    A better approach can be using sturctured entries
+  """
+  def new, do: ShoppingCart.new
+  def add_items(cart,cart_struc) do
+    ShoppingCart.add_item(cart,cart_struc.date,cart_struc.item)
+  end
+end
+
+IO.puts("Cart 2 information")
+
+cart2=MultiDictMap.new
+data=%{date: ~D[2018-12-19] , item: "Butter"}
+IO.puts(data.date)
+cart2=MultiDictMap.add_items(cart2,data)
+ShoppingCart.view_cart(cart2)
