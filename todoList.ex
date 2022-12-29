@@ -20,3 +20,6 @@ cart=ShoppingCart.add_item(cart,1,"Fish")
 cart=ShoppingCart.add_item(cart,2,"Vanilla")
 ShoppingCart.view_cart(cart)
 IO.inspect(ShoppingCart.view_items(cart,1))
+
+#useful for debugging
+IO.puts(inspect(cart, structs: False))
