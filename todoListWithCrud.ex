@@ -10,7 +10,7 @@ defmodule TodoList do
     entry=Map.put(entry, :id , list.id)
     new_entry=Map.put(list.tasks,entry.id,entry)
     %{list | id: new_entry.id+1, tasks: new_entry}
-
+    #predicted data structure %TodoList{id : , tasks: %{id: , %{date: , id: , value: }}}
   end
 
   def get_item(list,date) do
