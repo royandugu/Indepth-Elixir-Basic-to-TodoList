@@ -55,12 +55,16 @@ defmodule TodoList do
     structure.tasks|>Stream.filter(fn {_ , entries} -> entries.date === date end) |> Enum.map(fn {_ , items} -> items end) #This makes both of them run at same time
   end
 
-  def update_items(structure,id) do
-    case Map.fetch(structure.tasks,id) do
-      :error -> structure
-      {:ok, old_entry} -> old_entry #for now just returning, it returns a tuple not a map
-    end
-  end
+  # def update_items(structure,id,value) do
+  #   update_entry=fn (old_entry,id,value) -> %{old_entry | id: id , items: value} end
+  #   case Map.fetch(structure.tasks,id) do
+  #     :error -> structure
+  #     {:ok, old_entry} ->
+  #       newValue=update_entry.(old_entry,id,value)
+  #       updateList=Map.put(todo,old_entry.id,newValue)
+  #   end
+  # end
+  #Do update_items again
 
   def display(structure) do
     IO.inspect(structure)
