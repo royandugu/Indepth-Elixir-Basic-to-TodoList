@@ -45,23 +45,25 @@ defmodule TodoList do
 
   def new, do: %TodoList{}
 
-  def add_item(list, entry)  do #list is the structure and entry is the map
-    entry=Map.put(entry, :id , list.auto_id)
-    new_entry=Map.put(list.tasks, list.auto_id , entry)
-    %TodoList{list | auto_id: list.auto_id+1 , tasks: new_entry} #embedding the new list to current one and returning it
+  def add_item(structure, entry)  do #structure is the structure and entry is the map
+    entry=Map.put(entry, :id , structure.auto_id)
+    new_entry=Map.put(structure.tasks, structure.auto_id , entry)
+    %TodoList{structure | auto_id: structure.auto_id+1 , tasks: new_entry} #embedding the new list to current one and returning it
   end
 
-  def filter_items(list,date) do
-    IO.puts("Below is the targeted")
-    Stream.map(list.tasks, fn x -> IO.inspect(x) end)
-    result=Stream.filter(list.tasks, fn {_ , entries} -> entries.date === date end)
-    final_result = Enum.filter(result, fn {_ , items} -> items.date === date end)
-    IO.inspect(result)
-    IO.inspect(final_result)
+  def filter_items(structure,date) do
+    structure.tasks|>Stream.filter(fn {_ , entries} -> entries.date === date end) |> Enum.map(fn {_ , items} -> items end) #This makes both of them run at same time
   end
 
-  def display(list) do
-    IO.inspect(list)
+  def update_items(structure,id) do
+    case Map.fetch(structure.tasks,id) do
+      :error -> structure
+      {:ok, old_entry} -> old_entry #for now just returning, it returns a tuple not a map
+    end
+  end
+
+  def display(structure) do
+    IO.inspect(structure)
   end
 
 
@@ -70,4 +72,7 @@ todoList1=TodoList.new
 todoList1=TodoList.add_item(todoList1,%{date: 1 , items: "Popcorn"})
 todoList1=TodoList.add_item(todoList1,%{date: 2 , items: "Yolk"})
 TodoList.display(todoList1)
-TodoList.filter_items(todoList1, 1)
+filterValue=TodoList.filter_items(todoList1, 1)
+TodoList.display(filterValue)
+value=TodoList.update_items(todoList1, 1)
+TodoList.display(value)
