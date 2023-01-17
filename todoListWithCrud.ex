@@ -55,15 +55,16 @@ defmodule TodoList do
     structure.tasks|>Stream.filter(fn {_ , entries} -> entries.date === date end) |> Enum.map(fn {_ , items} -> items end) #This makes both of them run at same time
   end
 
-  # def update_items(structure,id,value) do
-  #   update_entry=fn (old_entry,id,value) -> %{old_entry | id: id , items: value} end
-  #   case Map.fetch(structure.tasks,id) do
-  #     :error -> structure
-  #     {:ok, old_entry} ->
-  #       newValue=update_entry.(old_entry,id,value)
-  #       updateList=Map.put(todo,old_entry.id,newValue)
-  #   end
-  # end
+  def update_items(structure,date,value) do
+    update_entry=fn (old_entry) -> %{old_entry | date: date , items: value} end
+    case Map.fetch(structure.tasks,date) do
+      :error -> structure
+      {:ok, old_entry} ->
+        new_value=update_entry.(old_entry)
+        update_list=Map.put(structure.tasks,old_entry.id,new_value)
+        %TodoList{structure | auto_id: structure.auto_id , tasks: update_list}
+    end
+  end
   #Do update_items again
 
   def display(structure) do
@@ -78,5 +79,8 @@ todoList1=TodoList.add_item(todoList1,%{date: 2 , items: "Yolk"})
 TodoList.display(todoList1)
 filterValue=TodoList.filter_items(todoList1, 1)
 TodoList.display(filterValue)
-value=TodoList.update_items(todoList1, 1)
+value=TodoList.update_items(todoList1, 1, "Cheese")
 TodoList.display(value)
+
+
+## We created a structure with auto_id which is a number and a tasks which is a map of date, id and items. In update items logic, we pass in the key and the value. That is map ko kun chain key laii kun chai value le replace garne ho vanera. Then we first check if it exists or not. We use case statement. Here, case statement returns either :error atom or a tuple of {:ok , list}, the list that we passed. Then if we get the second tuple then we update our entry
