@@ -65,12 +65,23 @@ defmodule TodoList do
         %TodoList{structure | auto_id: structure.auto_id , tasks: update_list}
     end
   end
+
+  def delete_items(structure, date) do
+    case Map.fetch(structure.tasks,date) do
+      :error -> structure
+      {:ok , match} ->
+        IO.puts("Below")
+        new_value=Map.filter(structure.tasks, fn x -> IO.inspect(x) end)
+        IO.inspect(new_value)
+        update_list=Map.put(structure.tasks,match.id,new_value)
+        %TodoList{structure | auto_id: structure.auto_id , tasks: update_list}
+    end
+  end
   #Do update_items again
 
   def display(structure) do
     IO.inspect(structure)
   end
-
 
 end
 todoList1=TodoList.new
@@ -81,6 +92,8 @@ filterValue=TodoList.filter_items(todoList1, 1)
 TodoList.display(filterValue)
 value=TodoList.update_items(todoList1, 1, "Cheese")
 TodoList.display(value)
-
+TodoList.delete_items(todoList1,1)
+IO.puts("After deleting")
+TodoList.display(todoList1)
 
 ## We created a structure with auto_id which is a number and a tasks which is a map of date, id and items. In update items logic, we pass in the key and the value. That is map ko kun chain key laii kun chai value le replace garne ho vanera. Then we first check if it exists or not. We use case statement. Here, case statement returns either :error atom or a tuple of {:ok , list}, the list that we passed. Then if we get the second tuple then we update our entry
