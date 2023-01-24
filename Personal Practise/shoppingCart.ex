@@ -28,16 +28,36 @@ defmodule Cart do
     end
   end
 
+  def check_exists(item,date_passed) do
+    item_map=elem(item,1)
+    if (item_map.date === date_passed) do
+      item_map
+    else
+      :unmatch
+    end
+  end
+
   #Read a specific item in the cart on the basis of date
-  def display_item(%Cart{}=cart,%Date{}=date) do
-    IO.puts("You send date")
+  def display_item_date(%Cart{}=cart,date) do
+    one_half=Enum.map(cart.item,fn x-> check_exists(x,date) end)
+    match_value=Enum.filter(one_half, fn x -> x !== :unmatch end)
+    IO.inspect(match_value)
+
+    if(match_value === []) do
+      IO.puts("You didn't add any item to the cart at this day")
+    else
+      IO.inspect(match_value)
+    end
+
   end
 
 end
 cart1=Cart.new()
 
-cart1=Cart.add_item(cart1,"Eggs", ~Date[2023-01-01])
-cart1=Cart.add_item(cart1,"Fish", ~Date[2020-2-3])
+
+cart1=Cart.add_item(cart1,"Eggs", 123)
+cart1=Cart.add_item(cart1,"aFish", 345)
 Cart.display(cart1)
 Cart.display_item(cart1,1)
+Cart.display_item_date(cart1,345)
 #Question 1: Map ko key mah number kasari ? Map.put function le key linxa tesma number (cart.id +1 )
