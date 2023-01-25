@@ -51,6 +51,33 @@ defmodule Cart do
 
   end
 
+  #Update a specific item in the on the basis of item number
+  def update_item(%Cart{}=cart,item_number,new_item_name) do
+    case Map.fetch(cart.item,item_number) do
+      :error -> cart
+      {:ok, match} ->
+        value=Map.put(match, :itemName,new_item_name)
+        item_map=%{cart.item | item_number => value}
+        %Cart{cart | item: item_map}
+    end
+  end
+
+  #update a specific item in the basis of date
+  def update_item_date(%Cart{}=cart,date,item_name) do
+    one_half=Enum.map(cart.item,fn x-> check_exists(x,date) end)
+    match_value=Enum.filter(one_half, fn x -> x !== :unmatch end)
+    case Enum.fetch(match_value,0) do
+      {:ok , []} -> IO.puts("Match failed")
+      {:ok , %{}=match} ->
+        new_value=Map.put(match,:itemName,item_name)
+        collection=%{cart.item | match.itemNumber => new_value} #this is why itemNumber is also there in the map
+        %Cart{cart | total_items: cart.total_items , item: collection}
+    end
+  end
+
+  #delete item on the basis of item_number
+  #delete item on the basis of date
+
 end
 cart1=Cart.new()
 
@@ -60,4 +87,8 @@ cart1=Cart.add_item(cart1,"aFish", 345)
 Cart.display(cart1)
 Cart.display_item(cart1,1)
 Cart.display_item_date(cart1,345)
+cart1=Cart.update_item(cart1,1,"Sausage")
+Cart.display(cart1)
+cart1=Cart.update_item_date(cart1,345,"Burger")
+Cart.display(cart1)
 #Question 1: Map ko key mah number kasari ? Map.put function le key linxa tesma number (cart.id +1 )
