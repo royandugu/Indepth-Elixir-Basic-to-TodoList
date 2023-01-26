@@ -76,7 +76,27 @@ defmodule Cart do
   end
 
   #delete item on the basis of item_number
+  def delete_item(%Cart{}=cart,item_number) do
+    case Map.fetch(cart.item,item_number) do
+      :error -> IO.puts("There is no item matching with the provided item number")
+      {:ok , match} ->
+        left_outs=Map.delete(cart.item,item_number)
+        %Cart{cart | total_items: cart.total_items-1 , item: left_outs}
+    end
+  end
+
   #delete item on the basis of date
+  def delete_item_date(%Cart{}=cart,date) do
+    one_half=Enum.map(cart.item,fn x-> check_exists(x,date) end)
+    match_value=Enum.filter(one_half, fn x -> x !== :unmatch end)
+    case Enum.fetch(match_value,0) do
+      {:ok , []} -> IO.puts("Internal server error")
+      {:ok , %{}=match}->
+        left_outs=Map.filter(cart.item,fn x -> x !== match end)
+        %Cart{cart | total_items: cart.total_items-1 , item: left_outs}
+    end
+  end
+
 
 end
 cart1=Cart.new()
@@ -90,5 +110,9 @@ Cart.display_item_date(cart1,345)
 cart1=Cart.update_item(cart1,1,"Sausage")
 Cart.display(cart1)
 cart1=Cart.update_item_date(cart1,345,"Burger")
+Cart.display(cart1)
+cart1=Cart.delete_item(cart1,1)
+Cart.display(cart1)
+cart1=Cart.delete_item_date(cart1,345)
 Cart.display(cart1)
 #Question 1: Map ko key mah number kasari ? Map.put function le key linxa tesma number (cart.id +1 )
