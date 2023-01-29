@@ -8,6 +8,11 @@ defmodule Cart do
   #Create a cart
   def new, do: %Cart{}
 
+  #Create a cart with multiple iterations <<other ways pani xa>>
+  def new(entries) do
+    Enum.reduce(entries,%Cart{},fn x,i -> add_item(i,x.itemName,x.date) end)
+  end
+
   #Insert into cart
   def add_item(%Cart{}=cart, itemName, date) do
     to_be_added=%{itemNumber: cart.total_items+1, date: date, itemName: itemName}
@@ -115,4 +120,8 @@ cart1=Cart.delete_item(cart1,1)
 Cart.display(cart1)
 cart1=Cart.delete_item_date(cart1,345)
 Cart.display(cart1)
+
+
+cart2=Cart.new([%{date: 123 , itemNumber: 1, itemName: "Pizza"}, %{date: 555 , itemNumber: 2 , itemName: "Burger"}])
+Cart.display(cart2)
 #Question 1: Map ko key mah number kasari ? Map.put function le key linxa tesma number (cart.id +1 )
