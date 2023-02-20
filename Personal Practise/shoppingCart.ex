@@ -5,6 +5,23 @@ defmodule Cart do
   """
   defstruct total_items: 0, item: %{}
 
+  #Implying the collectable protocol
+  # defimpl Collectable, for: Cart do
+  #   def into(cart) do
+  #     {cart , &callback/2}
+  #   end
+  # end
+
+  # defp callback(cart, {:contd,item_name,date}) do
+  #   Cart.add_item(cart,item_name,date)
+  # end
+
+  # defp callback(cart, :hlt), do: :ok
+
+  # def callback(cart, :done), do: cart
+
+
+
   #Create a cart
   def new, do: %Cart{}
 
@@ -14,8 +31,8 @@ defmodule Cart do
   end
 
   #Insert into cart
-  def add_item(%Cart{}=cart, itemName, date) do
-    to_be_added=%{itemNumber: cart.total_items+1, date: date, itemName: itemName}
+  def add_item(%Cart{}=cart, item_name, date) do
+    to_be_added=%{item_number: cart.total_items+1, date: date, item_name: item_name}
     new_map=Map.put(cart.item, cart.total_items+1, to_be_added)
     %Cart{cart | total_items: cart.total_items+1, item: new_map}
   end
@@ -124,4 +141,11 @@ Cart.display(cart1)
 
 cart2=Cart.new([%{date: 123 , itemNumber: 1, itemName: "Pizza"}, %{date: 555 , itemNumber: 2 , itemName: "Burger"}])
 Cart.display(cart2)
+
+# entries=[
+#   {"eggs",123},
+#   {"fish",456}
+# ]
+# for entry<-entries, into: Cart.new, do: entry
+#Like the above we can enter in collectables
 #Question 1: Map ko key mah number kasari ? Map.put function le key linxa tesma number (cart.id +1 )
