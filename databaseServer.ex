@@ -35,5 +35,5 @@ defmodule DatabaseServer do
 
 end
 
-##Creating a Database pool
+##Creating a Database process pool
 pool=Enum.map(1..100 , fn _ -> DatabaseServer.start() end)
