@@ -3,6 +3,7 @@
 
 defmodule DatabaseServer do
   def start do
+
     spawn(&loop/0) #We reference a function not call it here
   end
 
@@ -37,3 +38,4 @@ end
 
 ##Creating a Database process pool
 pool=Enum.map(1..100 , fn _ -> DatabaseServer.start() end)
+IO.inspect(pool)
